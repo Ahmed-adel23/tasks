@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+        <title>Image Upload</title>
+</head>
+<body>
+    <div class=" mt-5 text-center" >
+    <h1 class=" my-5 text- bg-black">Upload an Image for Prediction</h1>
+    <form  class="row justify-content-center bg-blue" style="width:400px; margin:0 auto ; height:100x" action="/predict" method="POST" enctype="multipart/form-data">
+        <input class="col-12 form-control"  type="file" name="image" accept="image/*">
+        <input type="submit" value="Predict" class="btn btn-lg btn-primary mt-3 col-12">
+    </form>
+    </div>
+    <!-- Display the uploaded image, class label, and confidence -->
+    {% if class_label %}
+        <div class="mt-5 d-flex flex-column justify-content-center  text-center" >
+        <h2>Predicted class: {{ class_label }}</h2>
+        <h5>Confidence: {{ (confidence * 100)|float|round(2) }}  % </h5>
+        <img src="{{ url_for('static', filename='temp_image.jpg') }}" class="m-auto" width="500" height="400" alt="Uploaded Image">
+        </div>
+        {% endif %}
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>       
+</body>
+</html>
