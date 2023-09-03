@@ -6,33 +6,33 @@ import os
 
 app = Flask(__name__)
 
-# Load your trained ResNet50 model (replace with the actual path to your model)
+# Load model
 model = load_model('cnn_model.h5')
 
 # Set the expected input shape for the model
 input_shape = (150, 150, 3)
 
-# Function to preprocess an image and make predictions
+# Function to preprocess and predict
 def preprocess_and_predict(image_path):
     try:
-        # Load and preprocess the image
+        
         image = cv2.imread(image_path)
         image = cv2.resize(image, (input_shape[1], input_shape[0]))
         image = image / 255.0  # Normalize the image
 
-        # Make a prediction
+       
         prediction = model.predict(np.expand_dims(image, axis=0))
 
-        # Get the class label with the highest probability
+      
         class_label = np.argmax(prediction)
 
-        # Map the class label to the class name using your 'code' dictionary
+        
         class_name = get_code(class_label)
 
-        # Get the prediction confidence (probability) as a Python float
-        confidence = float(np.max(prediction))
+        
+        accuracy = float(np.max(prediction))
 
-        return class_name, confidence, image
+        return class_name, accuracy, image
 
     except Exception as e:
         return str(e), None, None
@@ -51,19 +51,19 @@ def index():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Receive an image from the form submission
+      
         image = request.files['image']
 
-        # Save the image temporarily
+        
         image_path = os.path.join('static', 'temp_image.jpg')
         image.save(image_path)
 
-        # Make a prediction
-        predicted_class, confidence, uploaded_image = preprocess_and_predict(image_path)
+
+        predicted_class, accuracy, uploaded_image = preprocess_and_predict(image_path)
 
         if predicted_class is not None:
             # Return the predicted class label, confidence, and the uploaded image
-            return render_template('index.html', class_label=predicted_class, confidence= float(confidence)  , image_path=image_path)
+            return render_template('index.html', class_label=predicted_class, accuracy= accuracy , image_path=image_path)
         else:
             return 'Error processing the image.'
 
