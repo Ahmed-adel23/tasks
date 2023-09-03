@@ -12,11 +12,10 @@
         <input type="submit" value="Predict" class="btn btn-lg btn-primary mt-3 col-12">
     </form>
     </div>
-    <!-- Display the uploaded image, class label, and confidence -->
     {% if class_label %}
         <div class="mt-5 d-flex flex-column justify-content-center  text-center" >
         <h2>Predicted class: {{ class_label }}</h2>
-        <h5>Confidence: {{ (confidence * 100)|float|round(2) }}  % </h5>
+        <h5>accuracy: {{ (confidence * 100)|float|round(2) }}  % </h5>
         <img src="{{ url_for('static', filename='temp_image.jpg') }}" class="m-auto" width="500" height="400" alt="Uploaded Image">
         </div>
         {% endif %}
